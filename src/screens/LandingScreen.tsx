@@ -22,28 +22,29 @@ export const LandingScreen = ({navigation}) => {
   const [lat, setLat] = useState<number>();
   const [long, setLong] = useState<number>();
 
-  useEffect(() => {
-    Geolocation.getCurrentPosition(position => {
-      setLat(position.coords.latitude);
-      setLong(position.coords.longitude);
-    });
-  });
 
   useEffect(() => {
     try {
       const apiKey = 'a72e4d8f377a4821bb83199f4b41025a';
+
+     
       (async () => {
+
+       const location= await Geolocation.getCurrentPosition(position => {
+          setLat(position.coords.latitude);
+          setLong(position.coords.longitude);
+        });
+
         const response = await opencage.geocode({
           q: `${lat} ${long}`,
           key: apiKey,
         });
 
         let currentAdress = response.results[0].formatted;
-        if (currentAdress.length > 0) {
-          setTimeout(() => {
+      
             setDisplayAddress(currentAdress);
-          }, 1000);
-        }
+         
+        
       })();
     } catch (err) {
       console.log(err);
