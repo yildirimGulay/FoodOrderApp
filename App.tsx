@@ -6,6 +6,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import { LandingScreen, AccountScreen, HomeScreen, CardScreen, OfferScreen } from './src/screens';
+import { Provider } from 'react-redux';
+import { store } from './src/redux';
 
 
 
@@ -53,6 +55,7 @@ function MyTabs() {
 const App = () => {
   const Stack = createNativeStackNavigator();
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator>
 
@@ -71,6 +74,7 @@ const App = () => {
       </Stack.Navigator>
       
     </NavigationContainer>
+    </Provider>
   );
 };
 

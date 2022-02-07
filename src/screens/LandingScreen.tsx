@@ -4,6 +4,10 @@ import {StyleSheet, Text, View, Image, Dimensions, Button} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import opencage from 'opencage-api-client';
 
+import { connect } from 'react-redux';
+import {onUpdateLocation, UserState, ApplicationState} from '../redux'
+
+
 export const screenWidth = Dimensions.get('screen').width;
 
 interface LocationAddress {
@@ -15,7 +19,12 @@ interface LocationAddress {
   name: string;
 }
 
-export const LandingScreen = ({navigation}) => {
+interface LandingProps {
+  userReducer: UserState,
+  onUpdateLocation: Function
+}
+
+const _LandingScreen: React.FC<LandingProps>  = ({navigation,userReducer,  onUpdateLocation }) => {
   const [displayAddress, setDisplayAddress] = useState(
     'Waiting for Current Location',
   );
@@ -74,6 +83,15 @@ export const LandingScreen = ({navigation}) => {
     </View>
   );
 };
+
+
+const mapToStateProps = (state: ApplicationState) => ({
+  userReducer: state.userReducer
+})
+
+const LandingScreen = connect(mapToStateProps, {onUpdateLocation})(_LandingScreen)
+
+export { LandingScreen }
 
 const styles = StyleSheet.create({
   container: {
