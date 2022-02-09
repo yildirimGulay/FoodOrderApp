@@ -5,7 +5,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import { LandingScreen, AccountScreen, HomeScreen, CardScreen, OfferScreen } from './src/screens';
+import { LandingScreen, AccountScreen, HomeScreen, CardScreen, OfferScreen, SearchScreen } from './src/screens';
 import { Provider } from 'react-redux';
 import { store } from './src/redux';
 
@@ -24,6 +24,7 @@ function MyTabs() {
           let icon = focused == true ? require('./src/images/home_icon.png') : require('./src/images/home_n_icon.png')
           return <Image source={icon} style={styles.tabIcon} />
         }
+
       }}
        />
         <Tab.Screen name="Offer" component={OfferScreen} 
@@ -70,6 +71,12 @@ const App = () => {
           component={MyTabs}
           options={{headerShown: false}}
         />  
+
+<Stack.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{headerShown: false}}
+        />
      
       </Stack.Navigator>
       

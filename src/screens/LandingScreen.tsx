@@ -50,11 +50,12 @@ const _LandingScreen: React.FC<LandingProps>  = ({navigation,userReducer,  onUpd
         });
 
         let currentAdress = response.results[0].formatted;
-      
+       
             setDisplayAddress(currentAdress);
-         
+            onUpdateLocation(currentAdress)
         
       })();
+      
     } catch (err) {
       console.log(err);
     }
@@ -64,6 +65,7 @@ const _LandingScreen: React.FC<LandingProps>  = ({navigation,userReducer,  onUpd
     }, 2000);
   }, [lat, long]);
 
+  
   return (
     <View style={styles.container}>
       <View style={styles.navigation}></View>

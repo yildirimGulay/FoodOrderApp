@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Dispatch } from "react";
 import { BASE_URL } from "../../utils";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export interface UpdateLocationAction {
@@ -21,6 +22,10 @@ export const onUpdateLocation = (location: string, postCode: string) => {
     return async (dispatch: Dispatch<UserAction>) => {
 
         try {
+            
+            await AsyncStorage.setItem('user_location', location)
+   
+
             dispatch({
                 type: "ON_UPDATE_LOCATION",
                 payload: location,
