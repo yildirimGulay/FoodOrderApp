@@ -81,40 +81,7 @@ const _LandingScreen: React.FC<LandingProps> = ({
         .catch(error => console.error(error));
     }
   }, [position]);
-
-  // console.log('lat', lat, 'long', long);
-
-  // useEffect(() => {
-  //   try {
-
-  //     (async () => {
-  //         Geolocation.getCurrentPosition(position => {
-  //         setLat(position.coords.latitude);
-  //         setLong(position.coords.longitude);
-
-  //       });
-  //     })();
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-
-  // }, [lat, long]);
-  // const apiKey = '9c7704b06ab64272a3fc91d27796a202';
-  // opencage.geocode({
-  //     q: `${lat} ${long}`,
-  //     key: apiKey,
-  //   })
-  //   .then(response => {
-  //     let currentAdress = response.results[0].formatted;
-  //     setDisplayAddress(currentAdress);
-  //     onUpdateLocation(currentAdress, response.results[0].components.postcode);
-
-  //     if (currentAdress.length > 0) {
-  //       setTimeout(() => {
-  //         navigation.navigate('MyTabs');
-  //       }, 2000);
-  //     }
-  //   });
+    
 
   return (
     <View style={styles.container}>

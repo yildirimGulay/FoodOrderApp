@@ -6,6 +6,7 @@ import {
   View,
   Button,
   ScrollView,
+  SafeAreaView,
   FlatList,
   Alert,
 } from 'react-native';
@@ -21,7 +22,12 @@ import {
   FoodModel,
 } from '../redux';
 
-import {SearchBar, ButtonWithIcon, CategoryCard} from '../components';
+import {
+  SearchBar,
+  ButtonWithIcon,
+  CategoryCard,
+  RestaurantCard,
+} from '../components';
 
 interface HomeProps {
   navigation: Navigation;
@@ -45,32 +51,25 @@ const _HomeScreen: React.FC<HomeProps> = ({
     onAvailability(postCode);
   }, []);
 
+  const onTapRestaurant = (item: Restaurant) => {
+    navigation.navigate('RestaurantPage', {restaurant: item});
+  };
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.navigation}>
-        <View
-          style={{
-            marginTop: 50,
-            flex: 4,
-            backgroundColor: 'white',
-            paddingLeft: 20,
-            paddingRight: 20,
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'row',
-          }}>
+        <View style={styles.navigation_inner_container}>
           <Text>{location} </Text>
-          <Text> Edit</Text>
+          <Text
+            style={{
+              color: 'rgba(246,80,0,255)',
+              fontSize: 20,
+              paddingLeft: 10,
+            }}>
+            Edit
+          </Text>
         </View>
-        <View
-          style={{
-            display: 'flex',
-            height: 60,
-            justifyContent: 'space-around',
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginLeft: 4,
-          }}>
+        <View style={styles.search_bar_container}>
           <SearchBar
             didTouch={() => {
               navigation.navigate('Search');
@@ -101,10 +100,36 @@ const _HomeScreen: React.FC<HomeProps> = ({
             )}
             keyExtractor={item => `${item.id}`}
           />
+          <View>
+            <Text style={styles.restaurantsTitle}>Top Restaurants</Text>
+          </View>
+
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={restaurants}
+            renderItem={({item}) => (
+              <RestaurantCard item={item} onTap={onTapRestaurant} />
+            )}
+            keyExtractor={item => `${item._id}`}
+          />
+
+          <View>
+            <Text style={styles.restaurantsTitle}>30 Minutes Foods</Text>
+          </View>
+
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={foods}
+            renderItem={({item}) => (
+              <RestaurantCard item={item} onTap={() => {}} />
+            )}
+            keyExtractor={item => `${item._id}`}
+          />
         </ScrollView>
       </View>
-      <View style={styles.footer}></View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -117,18 +142,41 @@ const HomeScreen = connect(mapToStateProps, {onAvailability})(_HomeScreen);
 
 export {HomeScreen};
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+
+    container: {
+      flex: 1,
+      backgroundColor: "rgba(242,242,242,1)"
   },
   navigation: {
-    flex: 2,
+      flex: 2,
+  },
+  navigation_inner_container: {
+      marginTop: 25,
+      flex: 4,
+      backgroundColor: "rgba(242,242,242,1)",
+      paddingLeft: 20,
+      paddingRight: 20,
+      justifyContent: "center",
+      alignItems: "flex-start",
+      flexDirection: "row"
+  },
+  search_bar_container: {
+      display: "flex",
+      height: 60,
+      justifyContent: "space-around",
+      flexDirection: "row",
+      alignItems: "center",
+      marginLeft: 4
   },
   body: {
-    flex: 9,
-    justifyContent: 'center',
-    alignItems: 'center',
+      flex: 9,
+      justifyContent: "center",
+      alignItems: "center",
   },
-  footer: {
-    flex: 1,
-  },
+  restaurantsTitle: {
+      fontSize: 25,
+      fontWeight: "800",
+      color: "#f15b5d",
+      marginLeft: 20
+  }
 });
