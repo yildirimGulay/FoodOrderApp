@@ -24,6 +24,7 @@ export const onUpdateLocation = (location: string, postCode: string) => {
         try {
             
             await AsyncStorage.setItem('user_location', location)
+            await AsyncStorage.setItem('user_location_postcode', postCode)
    
 
             dispatch({

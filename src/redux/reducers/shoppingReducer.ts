@@ -5,7 +5,7 @@ import { FoodAvailability, ShoppingState, FoodModel } from "../models"
 
 const initialState = {
     availability: {} as FoodAvailability,
-   
+    availableFoods: {} as [FoodModel]
 }
 
 const ShoppingReducer = (state: ShoppingState = initialState, action: ShoppingAction) => {
@@ -16,6 +16,7 @@ const ShoppingReducer = (state: ShoppingState = initialState, action: ShoppingAc
             return {
                 ...state,
                 availability: action.payload
+
             }
             
     
