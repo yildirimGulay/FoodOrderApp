@@ -53,11 +53,15 @@ const _HomeScreen: React.FC<HomeProps> = ({
 
   const onTapRestaurant = (item: Restaurant) => {
     navigation.navigate('Restaurant', {restaurant: item});
+   
   };
+
 
   const onTapFood = (item: FoodModel) => {
     navigation.navigate('FoodDetail', {food: item});
   };
+
+  
 
   return (
     <SafeAreaView style={styles.container}>

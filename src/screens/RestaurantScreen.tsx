@@ -1,17 +1,22 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import {StyleSheet, Text, View,SafeAreaView} from 'react-native';
+import React from 'react';
+import {Restaurant} from '../redux';
 
-export const RestaurantScreen = () => {
-
-
-  
-  return (
-    <View>
-      <Text>RestaurantScreen</Text>
-    </View>
-  )
+interface RestaurantProps {
+  navigation: {getParam: Function; goBack: Function};
 }
 
+export const RestaurantScreen = ({navigation,route}) => {
 
+  const {restaurant} = route.params;
 
-const styles = StyleSheet.create({})
+  
+
+  return (
+    <SafeAreaView>
+      <Text>{restaurant.name}</Text>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({});
