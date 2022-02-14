@@ -52,7 +52,11 @@ const _HomeScreen: React.FC<HomeProps> = ({
   }, []);
 
   const onTapRestaurant = (item: Restaurant) => {
-    navigation.navigate('RestaurantPage', {restaurant: item});
+    navigation.navigate('Restaurant', {restaurant: item});
+  };
+
+  const onTapFood = (item: FoodModel) => {
+    navigation.navigate('FoodDetail', {food: item});
   };
 
   return (
@@ -123,7 +127,7 @@ const _HomeScreen: React.FC<HomeProps> = ({
             showsHorizontalScrollIndicator={false}
             data={foods}
             renderItem={({item}) => (
-              <RestaurantCard item={item} onTap={() => {}} />
+              <RestaurantCard item={item} onTap={onTapFood} />
             )}
             keyExtractor={item => `${item._id}`}
           />
@@ -142,41 +146,40 @@ const HomeScreen = connect(mapToStateProps, {onAvailability})(_HomeScreen);
 
 export {HomeScreen};
 const styles = StyleSheet.create({
-
-    container: {
-      flex: 1,
-      backgroundColor: "rgba(242,242,242,1)"
+  container: {
+    flex: 1,
+    backgroundColor: 'rgba(242,242,242,1)',
   },
   navigation: {
-      flex: 2,
+    flex: 2,
   },
   navigation_inner_container: {
-      marginTop: 25,
-      flex: 4,
-      backgroundColor: "rgba(242,242,242,1)",
-      paddingLeft: 20,
-      paddingRight: 20,
-      justifyContent: "center",
-      alignItems: "flex-start",
-      flexDirection: "row"
+    marginTop: 25,
+    flex: 4,
+    backgroundColor: 'rgba(242,242,242,1)',
+    paddingLeft: 20,
+    paddingRight: 20,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    flexDirection: 'row',
   },
   search_bar_container: {
-      display: "flex",
-      height: 60,
-      justifyContent: "space-around",
-      flexDirection: "row",
-      alignItems: "center",
-      marginLeft: 4
+    display: 'flex',
+    height: 60,
+    justifyContent: 'space-around',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 4,
   },
   body: {
-      flex: 9,
-      justifyContent: "center",
-      alignItems: "center",
+    flex: 9,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   restaurantsTitle: {
-      fontSize: 25,
-      fontWeight: "800",
-      color: "#f15b5d",
-      marginLeft: 20
-  }
+    fontSize: 25,
+    fontWeight: '800',
+    color: '#f15b5d',
+    marginLeft: 20,
+  },
 });
