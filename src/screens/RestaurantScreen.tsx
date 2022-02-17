@@ -5,16 +5,19 @@ import { ButtonWithIcon, FoodCard } from '../components';
 import {FoodModel,ApplicationState, Restaurant, onUpdateCart, UserState} from '../redux';
 import { checkExistence } from '../utils'
 import { connect } from 'react-redux';
+import { RouteProp } from '@react-navigation/native';
+
 
 interface RestaurantProps {
- 
+    navigation:any,
+    route: RouteProp<{ params: { restaurant: Restaurant  } }, 'params'>,
     userReducer: UserState,
     onUpdateCart: Function,
 }
 
 export const _RestaurantScreen: React.FC<RestaurantProps> = ({navigation,route, userReducer,onUpdateCart}) => {
 
-  const {restaurant}  = route.params as Restaurant;
+  const {restaurant}  = route.params 
 
   const { cart } = userReducer
 
