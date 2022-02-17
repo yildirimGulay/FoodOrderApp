@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {StyleSheet, Text, View,TouchableOpacity, ImageBackground, Dimensions, FlatList} from 'react-native';
 
 import { RouteProp } from '@react-navigation/native';
