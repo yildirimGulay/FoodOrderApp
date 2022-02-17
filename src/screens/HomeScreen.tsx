@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+
 import {
   StyleSheet,
   Text,
@@ -20,6 +21,7 @@ import {
   ShoppingState,
   Restaurant,
   FoodModel,
+  onSearchFoods,
 } from '../redux';
 
 import {
@@ -30,11 +32,11 @@ import {
 } from '../components';
 
 interface HomeProps {
-  navigation: Navigation;
+  navigation: any,
   userReducer: UserState;
   shoppingReducer: ShoppingState;
   onAvailability: Function;
-  //onSearchFoods: Function
+  onSearchFoods: Function;
 }
 
 const _HomeScreen: React.FC<HomeProps> = ({
@@ -42,6 +44,7 @@ const _HomeScreen: React.FC<HomeProps> = ({
   userReducer,
   shoppingReducer,
   onAvailability,
+  onSearchFoods
 }) => {
   const {location, postCode} = userReducer;
   const {availability} = shoppingReducer;
@@ -49,6 +52,9 @@ const _HomeScreen: React.FC<HomeProps> = ({
 
   useEffect(() => {
     onAvailability(postCode);
+    setTimeout(() => {
+      onSearchFoods(postCode)
+    },1000)
   }, []);
 
   const onTapRestaurant = (item: Restaurant) => {
@@ -141,14 +147,7 @@ const _HomeScreen: React.FC<HomeProps> = ({
   );
 };
 
-const mapToStateProps = (state: ApplicationState) => ({
-  userReducer: state.userReducer,
-  shoppingReducer: state.shoppingReducer,
-});
 
-const HomeScreen = connect(mapToStateProps, {onAvailability})(_HomeScreen);
-
-export {HomeScreen};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -187,3 +186,12 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
 });
+
+const mapToStateProps = (state: ApplicationState) => ({
+  userReducer: state.userReducer,
+  shoppingReducer: state.shoppingReducer,
+});
+
+const HomeScreen = connect(mapToStateProps, {onAvailability, onSearchFoods})(_HomeScreen);
+
+export {HomeScreen};

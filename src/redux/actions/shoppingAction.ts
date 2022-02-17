@@ -9,6 +9,11 @@ export interface AvailabilityAction {
     payload: FoodAvailability
 }
 
+export interface FoodSearchAction{
+    readonly type: 'ON_FOODS_SEARCH',
+    payload: [FoodModel]
+}
+
 
 
 export interface ShoppingErrorAction {
@@ -16,7 +21,7 @@ export interface ShoppingErrorAction {
     payload: any
 }
 
-export type ShoppingAction = AvailabilityAction | ShoppingErrorAction 
+export type ShoppingAction = AvailabilityAction | ShoppingErrorAction | FoodSearchAction 
 
 export const onAvailability = (postCode: string) => {
 
@@ -48,5 +53,33 @@ export const onAvailability = (postCode: string) => {
             
         }
         
+    }
+}
+
+export const onSearchFoods = (postCode:string)=>{
+    return async (dispatch: Dispatch<ShoppingAction>)=>{
+        try{
+            const response = await axios.get<[FoodModel]>(`${BASE_URL}food/search/${postCode}`)
+            
+            console.log('responsSearch',response)
+
+            if(!response){
+                dispatch({
+                    type:'ON_SHOPPING_ERROR',
+                    payload:'Availability error'
+                })
+            }else {
+                dispatch({
+                    type:'ON_FOODS_SEARCH',
+                    payload:response.data
+                })
+            }
+        }catch (error) {
+            dispatch({
+                type:'ON_SHOPPING_ERROR',
+                payload:error
+            })
+
+        }
     }
 }

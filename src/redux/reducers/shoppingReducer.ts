@@ -18,6 +18,12 @@ const ShoppingReducer = (state: ShoppingState = initialState, action: ShoppingAc
                 availability: action.payload
 
             }
+
+        case 'ON_FOODS_SEARCH':
+            return {
+                ...state,
+                availableFoods:action.payload
+            }
             
     
         default:
