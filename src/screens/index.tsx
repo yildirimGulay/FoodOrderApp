@@ -1,6 +1,6 @@
 export * from './HomeScreen';
 export * from './OfferScreen';
-export * from './CardScreen';
+export * from './CartScreen';
 export * from './AccountScreen';
 export * from './LandingScreen';
 export * from './SearchScreen';

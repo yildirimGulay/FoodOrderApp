@@ -3,7 +3,7 @@ import {Image, StyleSheet} from 'react-native';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import {AccountScreen, HomeScreen, CardScreen, OfferScreen} from '../screens';
+import {AccountScreen, HomeScreen, CartScreen, OfferScreen} from '../screens';
 
 
 
@@ -18,7 +18,7 @@ export const TabNav = () => {
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarIcon: ({focused, tintColor}) => {
+          tabBarIcon: ({focused}) => {
             let icon =
               focused == true
                 ? require('../images/home_icon.png')
@@ -31,7 +31,7 @@ export const TabNav = () => {
         name="Offer"
         component={OfferScreen}
         options={{
-          tabBarIcon: ({focused, tintColor}) => {
+          tabBarIcon: ({focused}) => {
             let icon =
               focused == true
                 ? require('../images/offer_icon.png')
@@ -41,10 +41,10 @@ export const TabNav = () => {
         }}
       />
       <Tab.Screen
-        name="Card"
-        component={CardScreen}
+        name="Cart"
+        component={CartScreen}
         options={{
-          tabBarIcon: ({focused, tintColor}) => {
+          tabBarIcon: ({focused}) => {
             let icon =
               focused == true
                 ? require('../images/cart_icon.png')
@@ -57,7 +57,7 @@ export const TabNav = () => {
         name="Acoount"
         component={AccountScreen}
         options={{
-          tabBarIcon: ({focused, tintColor}) => {
+          tabBarIcon: ({focused}) => {
             let icon =
               focused == true
                 ? require('../images/account_icon.png')

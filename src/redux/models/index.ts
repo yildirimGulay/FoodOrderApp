@@ -16,6 +16,7 @@ export interface FoodModel {
     unit: number
 }
 
+
 export interface Restaurant {
     _id: string,
     name: string,
