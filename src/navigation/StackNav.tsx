@@ -7,6 +7,7 @@ import {
   SearchScreen,
   FoodDetailScreen,
   RestaurantScreen,
+  LoginScreen
  
 } from '../screens';
 
@@ -27,6 +28,7 @@ export const StackNav = () => {
       <Stack.Screen name="Search" component={SearchScreen} />
       <Stack.Screen name="FoodDetail" component={FoodDetailScreen} />
       <Stack.Screen name="Restaurant" component={RestaurantScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} />
 
       
     </Stack.Navigator>

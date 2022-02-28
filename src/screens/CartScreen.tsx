@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, createRef } from 'react';
 import {
   View,
   Text,
@@ -36,9 +36,10 @@ const _CartScreen: React.FC<CartScreenProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [keyword, setKeyword] = useState('');
   const [totalAmount, setTotalAmount] = useState(0);
+  const popupRef = createRef<PaymentTypePopup>()
 
   const {availableFoods} = shoppingReducer;
-  const {cart} = userReducer;
+  const {cart, user} = userReducer;
 
   const onCalculateAmount = () => {
     let total = 0;
@@ -56,7 +57,15 @@ const _CartScreen: React.FC<CartScreenProps> = ({
   }, [cart]);
 
   const onValidateOrder = () => {
-    navigation.navigate('Home');
+    if(user !== undefined) {
+      if(!user.verified) {
+          navigation.navigate('Login')
+      } else {
+          popupRef.current?.open()
+      }
+  } else {
+      navigation.navigate("Login")
+  }  
   };
 
   const onTapFood = (item: FoodModel) => {

@@ -54,6 +54,16 @@ const UserReducer = (state: UserState = initialState, action: UserAction) => {
                     }
                 }
 
+
+                case 'ON_USER_LOGIN':
+
+                    return {
+                        ...state,
+                        user: action.payload
+                    }
+
+             console.log('User Token'+ action.payload)
+
             default:
             return state;
     }

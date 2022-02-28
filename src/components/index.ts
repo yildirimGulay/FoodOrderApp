@@ -6,3 +6,4 @@ export * from './FoodCard';
 export * from './ButtonAddRemove';
 export * from './FoodCardInfo';
 export * from './ButtonWithTitle';
+export * from './TextField';
