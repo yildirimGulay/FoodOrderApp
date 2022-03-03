@@ -1,5 +1,5 @@
 import { UserAction } from "../actions"
-import {  UserModel, UserState,FoodModel } from "../models"
+import {  UserModel, UserState,FoodModel, OrderModel } from "../models"
 
 
 const initialState: UserState = {
@@ -7,7 +7,8 @@ const initialState: UserState = {
     location: "" as string,
     postCode: "" as string,
     error: undefined,
-    cart: {} as [FoodModel]
+    cart: {} as [FoodModel],
+    orders: {} as [OrderModel]
 
 }
 
@@ -31,7 +32,7 @@ const UserReducer = (state: UserState = initialState, action: UserAction) => {
                     }
                 }
 
-                const existingFoods = state.cart.filter(item => item._id == action.payload._id);
+                const existingFoods = state.cart.filter(item => item._id === action.payload._id);
 
                 //Check for Existing Product to update unit
                 if (existingFoods.length > 0){
@@ -62,7 +63,34 @@ const UserReducer = (state: UserState = initialState, action: UserAction) => {
                         user: action.payload
                     }
 
-             console.log('User Token'+ action.payload)
+             //console.log('User Token'+ action.payload)
+
+             case 'ON_CREATE_ORDER':
+
+             if(!Array.isArray(state.orders)) {
+                 return {
+                     ...state,
+                     cart: [],
+                     orders: [action.payload]
+                 }
+             }else {
+                 return {
+                     ...state,
+                     cart: [],
+                     orders: [...state.orders,action.payload]
+                 }
+                }
+
+                case 'ON_VIEW_ORDER':
+                    return{
+                        ...state,
+                        orders:action.payload
+                    }
+                    case 'ON_DELETE_CARD':
+                        return{
+                            ...state,
+                           cart:[]
+                        }
 
             default:
             return state;

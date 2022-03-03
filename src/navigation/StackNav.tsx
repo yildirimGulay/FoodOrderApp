@@ -7,11 +7,14 @@ import {
   SearchScreen,
   FoodDetailScreen,
   RestaurantScreen,
-  LoginScreen
+  LoginScreen,
+  OrderScreen,
+  OrderDetailScreen
  
 } from '../screens';
 
 import {TabNav} from './TabNav';
+
 
 export const StackNav = () => {
   const Stack = createNativeStackNavigator();
@@ -29,6 +32,8 @@ export const StackNav = () => {
       <Stack.Screen name="FoodDetail" component={FoodDetailScreen} />
       <Stack.Screen name="Restaurant" component={RestaurantScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Order" component={OrderScreen} />
+      <Stack.Screen name="OrderDetail" component={OrderDetailScreen} />
 
       
     </Stack.Navigator>

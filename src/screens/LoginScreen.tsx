@@ -1,32 +1,90 @@
 import {StyleSheet, Text, View, Image} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 
-import {ApplicationState, OnUserLogin, OnUserSignup, UserState} from '../redux';
+import {
+  ApplicationState,
+  OnUserLogin,
+  OnUserSignup,
+  UserState,
+  onVerifyOTP,
+  onOTPRequest,
+} from '../redux';
 import {TextField, ButtonWithTitle, ButtonWithIcon} from '../components';
 
 interface LoginProps {
   OnUserSignup: Function;
   OnUserLogin: Function;
   userReducer: UserState;
+  onVerifyOTP: Function;
+  onOTPRequest: Function;
+  navigation: any;
 }
 
 const _LoginScreen: React.FC<LoginProps> = ({
   OnUserLogin,
   OnUserSignup,
   userReducer,
+  onVerifyOTP,
+  onOTPRequest,
+  navigation,
 }) => {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [title, setTitle] = useState('Login');
-  const [isSignup, setIsSignup] = useState(true);
+  const [isSignup, setIsSignup] = useState(false);
   const [otp, setOtp] = useState('');
-  const [verified, setVerified] = useState(false);
+  const [verified, setVerified] = useState(true);
   const [requestOtpTitle, setRequestOtpTitle] = useState(
     'Request a new OTP in',
   );
   const [canRequestOtp, setCanRequestOtp] = useState(false);
+
+  const {user} = userReducer;
+
+  let countDown: NodeJS.Timer;
+
+  useEffect(() => {
+    if (user.token !== undefined) {
+      if (user.verified === true) {
+        navigation.navigate('Cart');
+      } else {
+        setVerified(user.verified);
+        onEnableOtpRequest();
+      }
+    }
+
+    return () => {
+      clearInterval(countDown);
+    };
+  }, [user]);
+
+  const onEnableOtpRequest = () => {
+    const otpDate = new Date();
+    otpDate.setTime(new Date().getTime() + 2 * 60 * 1000);
+    const optTime = otpDate.getTime();
+
+    countDown = setInterval(function () {
+      const currentTime = new Date().getTime();
+      const totalTime = optTime - currentTime;
+
+      let minutes = Math.floor((totalTime % (1000 * 60 * 60)) / (1000 * 60));
+      let seconds = Math.floor((totalTime % (1000 * 60)) / 1000);
+
+      if (seconds < 10) {
+        setRequestOtpTitle(`Request a new OTP in ${minutes}:0${seconds}`);
+      } else {
+        setRequestOtpTitle(`Request a new OTP in ${minutes}:${seconds}`);
+      }
+
+      if (minutes < 1 && seconds < 1) {
+        setRequestOtpTitle('Request a new OTP');
+        setCanRequestOtp(true);
+        clearInterval(countDown);
+      }
+    }, 1000);
+  };
 
   console.log(email, phone);
   const onTapAuthenticate = () => {
@@ -40,6 +98,15 @@ const _LoginScreen: React.FC<LoginProps> = ({
   const onTapOptions = () => {
     setIsSignup(!isSignup);
     setTitle(!isSignup ? 'Signup' : 'Login');
+  };
+
+  const onTapVerify = () => {
+    onVerifyOTP(otp, user);
+  };
+
+  const onTapRequestNewOTP = () => {
+    setCanRequestOtp(false);
+    onOTPRequest(user);
   };
 
   if (!verified) {
@@ -59,16 +126,17 @@ const _LoginScreen: React.FC<LoginProps> = ({
 
           <ButtonWithTitle
             title="Verify OTP"
-            onTap={() => {}}
+            onTap={onTapVerify}
             width={340}
             height={50}
           />
           <ButtonWithTitle
             title={requestOtpTitle}
             isNoBg={true}
-            onTap={() => {}}
+            onTap={onTapRequestNewOTP}
             width={340}
             height={50}
+            disable={!canRequestOtp}
           />
         </View>
 
@@ -130,9 +198,12 @@ const mapToStateProps = (state: ApplicationState) => ({
   userReducer: state.userReducer,
 });
 
-const LoginScreen = connect(mapToStateProps, {OnUserSignup, OnUserLogin})(
-  _LoginScreen,
-);
+const LoginScreen = connect(mapToStateProps, {
+  OnUserSignup,
+  OnUserLogin,
+  onVerifyOTP,
+  onOTPRequest,
+})(_LoginScreen);
 
 export {LoginScreen};
 

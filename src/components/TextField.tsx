@@ -20,18 +20,39 @@ export const TextField: React.FC<TextFieldProps> = ({
     setIsPassword(isSecure);
   }, []);
 
-  return (
-    <View style={styles.container}>
-      <TextInput
-        placeholder={placeholder}
-        autoCapitalize="none"
-        secureTextEntry={isPassword}
-        onChangeText={text => onTextChange(text)}
-        style={styles.textField}
-      />
-    </View>
-  );
-};
+  if(isOTP) {
+
+    return(
+        <View style={styles.container} >
+            <TextInput 
+            placeholder={placeholder}
+            maxLength={6}
+            autoCapitalize='none'
+            secureTextEntry={true}
+            showSoftInputOnFocus={false}
+            keyboardType='numeric'
+            onChangeText={(text) => onTextChange(text)}
+            style={styles.otpTextField} />
+        </View>
+    )
+} else {
+
+    return(
+        <View style={styles.container} >
+            <TextInput 
+            placeholder={placeholder}
+            autoCapitalize='none'
+            secureTextEntry={isSecure}
+            showSoftInputOnFocus={false}
+            keyboardType='numeric'
+            onChangeText={(text) => onTextChange(text)}
+            style={styles.textField} />
+        </View>
+    )
+}
+}
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -53,4 +74,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#000',
   },
+  otpTextField: {
+    flex: 1,
+    width: 320,
+    height: 50,
+    fontSize: 25,
+    color: "#000",
+    textAlign: "center",
+}
 });

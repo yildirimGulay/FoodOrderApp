@@ -7,3 +7,5 @@ export * from './SearchScreen';
 export * from './FoodDetailScreen';
 export * from './RestaurantScreen';
 export * from './LoginScreen';
+export * from './OrderScreen';
+export * from './OrderDetailScreen';

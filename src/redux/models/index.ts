@@ -16,6 +16,23 @@ export interface FoodModel {
     unit: number
 }
 
+export interface CartModel {
+    _id: string,
+    food: FoodModel,
+    unit: number
+}
+
+export interface OrderModel {
+    _id: string,
+    orderID: string,
+    items: [CartModel],
+    totalAmount: number,
+    orderDate: number,
+    paidThrough: string,
+    paymentResponse: string,
+    orderStatus: string
+}
+
 
 export interface Restaurant {
     _id: string,
@@ -46,7 +63,8 @@ export interface UserState {
     location: string,
     postCode: string,
     error: string | undefined,
-    cart: [FoodModel]
+    cart: [FoodModel], 
+    orders: [OrderModel]
 }
 
 export interface ShoppingState {
