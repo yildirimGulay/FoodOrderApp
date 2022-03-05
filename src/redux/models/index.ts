@@ -64,10 +64,31 @@ export interface UserState {
     postCode: string,
     error: string | undefined,
     cart: [FoodModel], 
-    orders: [OrderModel]
+    orders: [OrderModel],
+    appliedOffer: OfferModel,
 }
 
 export interface ShoppingState {
     availability: FoodAvailability,
-    availableFoods: [FoodModel]
+    availableFoods: [FoodModel], 
+    offers: [OfferModel]
+}
+
+export interface OfferModel {
+    _id: string,
+    offerType: string,
+    vendors: [any],
+    images: [string],
+    title: string,
+    description: string,
+    minValue: number,
+    offerAmount: number,
+    offerPercentage: number,
+    startValidity: Date,
+    endValidity: Date,
+    promoCode: string,
+    promoType: string,
+    bank: [any],
+    bin: [any],
+    pincode: string
 }

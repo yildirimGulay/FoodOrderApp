@@ -20,11 +20,12 @@ import {
   onUpdateCart,
   UserState,
   onCreateOrder,
-  onDeleteCart
+  onApplyOffer
+ 
 } from '../redux';
 
 import {FoodCardInfo, ButtonWithTitle} from '../components';
-import {checkExistence} from '../utils';
+import {checkExistence, showAlert} from '../utils';
 
 import PaymentTypePopup from "react-native-raw-bottom-sheet";
 
@@ -34,7 +35,7 @@ interface CartScreenProps {
   shoppingReducer: ShoppingState;
   onUpdateCart: Function;
   onCreateOrder: Function,
-  onDeleteCart:Function
+  onApplyOffer: Function
 }
 
 const _CartScreen: React.FC<CartScreenProps> = ({
@@ -42,15 +43,20 @@ const _CartScreen: React.FC<CartScreenProps> = ({
   shoppingReducer,
   onUpdateCart,
   userReducer,
-onCreateOrder,
+  onCreateOrder,
+  onApplyOffer
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [keyword, setKeyword] = useState('');
-  const [totalAmount, setTotalAmount] = useState(0);
+    const [totalAmount, setTotalAmount] = useState(0);
+    const [totalTax, setTotalTax] = useState(0)
+    const [payableAmount, setPayableAmount] = useState(0)
+    const [discount, setDiscount] = useState(0)
+    const [isPayment, setIsPayment] = useState(false)
+  
+ 
   const popupRef = createRef<PaymentTypePopup>()
 
   const {availableFoods} = shoppingReducer;
-  const {cart, user, location, orders } = userReducer;
+  const {cart, user, location, orders , appliedOffer} = userReducer;
 
 
   useEffect(() => {
@@ -65,8 +71,36 @@ onCreateOrder,
       });
     }
 
-    setTotalAmount(total);
-  };
+    const tax = (total / 100 * 0.9) + 40
+
+        if(total > 0) {
+            setTotalTax(tax)
+        }
+
+        setTotalAmount(total)
+        setPayableAmount(total)
+        setDiscount(0)
+        
+        if(appliedOffer._id !== undefined) {
+
+            if(total >= appliedOffer.minValue) {
+
+                const discount = (total / 100) * appliedOffer.offerPercentage
+                setDiscount(discount)
+                const afterDiscount = (total - discount)
+                setPayableAmount(afterDiscount)
+
+            } else {
+                showAlert("The applied Offer is not Applicable!",
+                `This offer is applicable with mininum ${appliedOffer.minValue} only! Please select another offer.`,
+               onApplyOffer(appliedOffer, true))
+            }
+        }
+
+        setTotalAmount(total)
+    };
+
+
 
 
 
@@ -91,12 +125,58 @@ onCreateOrder,
     
     onCreateOrder(cart, user)
     popupRef.current?.close()
-   // onApplyOffer(appliedOffer, true)
+    onApplyOffer(appliedOffer, true)
 }
 
   const onTapFood = (item: FoodModel) => {
     navigation.navigate('FoodDetail', {food: item});
   };
+
+
+  const footerContent = () => {
+    return(
+        <View style={styles.footer_content_container} >
+            <TouchableOpacity style={[styles.footer_content_button, {height: 80}]}
+            onPress={() => navigation.navigate('CartOffer')}
+            >  
+                <View style={{flex: 1}}>
+                    <Text style={styles.offer_title_text} >Offers & Deals</Text>
+                    {appliedOffer._id !== undefined ?
+                        <View style={{flex:1}} ><Text style={styles.offer_text} >{appliedOffer.offerPercentage} % of Discount</Text></View>
+                        :
+                        <View><Text>You can apply available Offers.</Text></View>
+                    }
+                </View>
+                <Image source={require("../images/arrow_icon.png")} style={styles.order_icon} />
+            </TouchableOpacity>
+
+            <View style={[styles.footer_content_button, {height: 250, justifyContent: "flex-start", alignItems: "flex-start", flexDirection: "column"}]} >
+                <Text style={[styles.offer_title_text, {flex: 1}]} >Bill Details</Text>
+                <View style={styles.footer_total_amount} >
+                    <Text style={{ flex: 1, color: "black", fontSize: 14}} >Total</Text>
+                    <Text style={{color: "black", fontSize: 16}} >{totalAmount.toFixed(0)} ₺</Text>
+                </View> 
+                <View style={styles.footer_total_amount} >
+                    <Text style={{ flex: 1, color: "black", fontSize: 14}} >Tax & Deliver Charge</Text>
+                    <Text style={{color: "black", fontSize: 16}} >{totalTax.toFixed(0)} ₺</Text>
+                </View>
+
+                {appliedOffer._id !== undefined && 
+                <View style={styles.footer_total_amount} >
+                    <Text style={{ flex: 1, color: "black", fontSize: 14}} >Discount (applied {appliedOffer.offerPercentage} % Offer) </Text>
+                    <Text style={{color: "black", fontSize: 16}} >{discount.toFixed(0)} ₺</Text>
+                </View>
+                }
+                
+                <View style={styles.footer_total_amount} >
+                    <Text style={{ flex: 1, color: "black", fontSize: 14}} >Net Payable</Text>
+                    <Text style={{color: "black", fontSize: 16}} >{payableAmount.toFixed(0)} ₺</Text>
+                </View>
+            </View>
+            
+        </View>
+    )
+}
 
 
   const popupView = () => {
@@ -180,7 +260,8 @@ onCreateOrder,
               data={cart}
               renderItem={({item}) => <FoodCardInfo item={checkExistence(item, cart)} onTap={onTapFood} onUpdateCart={onUpdateCart} /> } 
               keyExtractor={(item) => `${item._id}`} 
-               />
+              ListFooterComponent={footerContent} />
+               
           </View>
 
           <View style={styles.footer}>
@@ -387,6 +468,6 @@ const mapStateToProps = (state: ApplicationState) => ({
   userReducer: state.userReducer,
 });
 
-const CartScreen = connect(mapStateToProps, {onUpdateCart,onCreateOrder, onDeleteCart})(_CartScreen);
+const CartScreen = connect(mapStateToProps, {onUpdateCart,onCreateOrder, onApplyOffer})(_CartScreen);
 
 export {CartScreen};

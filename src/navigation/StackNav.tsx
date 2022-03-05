@@ -9,7 +9,8 @@ import {
   RestaurantScreen,
   LoginScreen,
   OrderScreen,
-  OrderDetailScreen
+  OrderDetailScreen,
+  OfferScreen,
  
 } from '../screens';
 
@@ -34,7 +35,8 @@ export const StackNav = () => {
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Order" component={OrderScreen} />
       <Stack.Screen name="OrderDetail" component={OrderDetailScreen} />
-
+      <Stack.Screen name="AccountOrder" component={OrderScreen} />
+      <Stack.Screen name="CartOffer" component={OfferScreen} />
       
     </Stack.Navigator>
   );

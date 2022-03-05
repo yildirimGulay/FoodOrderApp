@@ -7,9 +7,11 @@ interface FoodCardProps{
     item: FoodModel;
     onTap: Function;
     onUpdateCart: Function;
+    unit?: number | undefined
+    qty?:number | undefined
  }
  
-const FoodCard: React.FC<FoodCardProps> = ({ item, onTap, onUpdateCart }) => {
+const FoodCard: React.FC<FoodCardProps> = ({ item, onTap, onUpdateCart,unit,qty }) => {
 
 
 const didUpdateCart = (unit: number) => {
@@ -17,6 +19,7 @@ const didUpdateCart = (unit: number) => {
     item.unit = unit;
     onUpdateCart(item);
 }
+console.log( 'foodcard',unit)
   
 return (<View style={styles.container}>
 
@@ -28,17 +31,25 @@ return (<View style={styles.container}>
                 <Text>{item.category}</Text>
             </View>
             <View style={{ display: 'flex', flex: 5, padding: 10, justifyContent:'space-around', alignItems: 'center'}}>
-                <Text style={{ fontSize: 18, fontWeight: '600', color: '#7C7C7C'}}>₹{item.price}</Text>
-                <ButtonAddRemove 
-                onAdd={() => {
-                    let unit = isNaN(item.unit) ? 0 : item.unit;
-                    didUpdateCart( unit + 1);
-                }} 
-                onRemove={() => {
-                    let unit = isNaN(item.unit) ? 0 : item.unit;
-                    didUpdateCart( unit > 0 ? unit - 1 : unit);
-                }} 
-                qty={item.unit} />
+                <Text style={{ fontSize: 18, fontWeight: '600', color: '#7C7C7C'}}> {item.price} ₺</Text>
+
+                        { unit !== undefined ?
+                            <Text style={styles.quantity_text} >Qty: {unit}</Text> :
+    
+                            <ButtonAddRemove 
+                            unit={item.unit}  
+                            onAdd={() => {
+                                let unit = isNaN(item.unit) ? 0 : item.unit
+                                didUpdateCart(unit + 1)
+                            }} 
+    
+                            onRemove={() => {
+                                let unit = isNaN(item.unit) ? 0 : item.unit
+                                didUpdateCart(unit > 0 ? unit - 1 : unit)
+                            }}
+                            qty={item.unit}   />
+                            
+                            }
             </View>
         </TouchableOpacity> 
 
@@ -64,7 +75,12 @@ container: {
 },
 navigation: { flex: 2, backgroundColor: 'red' },
 body: { flex: 10, justifyContent: 'center', alignItems: 'center', backgroundColor: 'yellow' },
-footer: { flex: 1, backgroundColor: 'cyan' }
+footer: { flex: 1, backgroundColor: 'cyan' },
+quantity_text: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "black"
+}
 })
 
  export { FoodCard }

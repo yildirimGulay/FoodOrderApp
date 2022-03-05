@@ -2,7 +2,7 @@ import axios from 'axios';
 import {Dispatch} from 'react';
 import {BASE_URL} from '../../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {FoodModel, UserModel, OrderModel} from '../models';
+import {FoodModel, UserModel, OrderModel, OfferModel} from '../models';
 
 export interface UpdateLocationAction {
   readonly type: 'ON_UPDATE_LOCATION';
@@ -30,16 +30,21 @@ export interface CreateOrderAction {
   payload: OrderModel;
   
 }
-export interface DeleteCart {
-  readonly type: 'ON_DELETE_CARD';
-  
-  
-}
+
 
 
 export interface ViewOrdersAction {
   readonly type: 'ON_VIEW_ORDER' | 'ON_CANCEL_ORDER';
   payload: [OrderModel];
+}
+
+export interface UserLogoutAction {
+  readonly type: "ON_USER_LOGOUT"
+}
+
+export interface AddRemoveOfferAction {
+  readonly type: "ON_ADD_OFFER" | "ON_REMOVE_OFFER",
+  payload: OfferModel
 }
 
 export type UserAction =
@@ -49,7 +54,9 @@ export type UserAction =
   | UserLoginAction
   | CreateOrderAction
   | ViewOrdersAction
-|DeleteCart
+  | UserLogoutAction
+  |AddRemoveOfferAction
+
 
 
 
@@ -83,14 +90,7 @@ export const onUpdateCart = (item: FoodModel) => {
   };
 };
 
-export const onDeleteCart = (item: [FoodModel]) => {
-  return async (dispatch: Dispatch<UserAction>) => {
-    dispatch({
-      type: 'ON_DELETE_CARD',
-      
-    });
-  };
-};
+
 export const OnUserLogin = (email: string, password: string) => {
   return async (dispatch: Dispatch<UserAction>) => {
     try {
@@ -291,3 +291,76 @@ export const onGetOrders = (user: UserModel) => {
     }
   };
 };
+
+
+export const onCancelOrder = (order: OrderModel, user: UserModel) => {
+    
+  return async (dispatch: Dispatch<UserAction>) => {
+
+      try {
+
+          axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`
+
+          const response = await axios.delete<[OrderModel]>(`${BASE_URL}user/order/${order._id}`)
+
+          if(!response) {
+              dispatch({
+                  type: "ON_USER_ERROR",
+                  payload: "User Verification Error"
+              })
+          } else {
+              dispatch({
+                  type: "ON_CANCEL_ORDER",
+                  payload: response.data
+              })
+          }
+          
+      } catch (error) {
+          dispatch({
+              type: "ON_USER_ERROR",
+              payload: error
+          })
+      }
+  }
+}
+
+export const onUserLogout = () => {
+    
+  return async (dispatch: Dispatch<UserAction>) => {
+
+      try {
+          
+          dispatch({
+              type: "ON_USER_LOGOUT"
+          })
+
+      } catch (error) {
+          dispatch({
+              type: "ON_USER_ERROR",
+              payload: error
+          })
+      }
+  }
+}
+
+export const onApplyOffer = (offer: OfferModel, isRemove: boolean) => {
+
+  return async (dispatch: Dispatch<UserAction>) => {
+
+      if(isRemove) {
+          dispatch({
+              type: "ON_REMOVE_OFFER",
+              payload: offer
+          })
+      } else {
+          dispatch({
+              type: "ON_ADD_OFFER",
+              payload: offer
+          })
+      }
+
+
+      
+
+  }
+}

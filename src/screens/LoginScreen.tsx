@@ -18,7 +18,7 @@ interface LoginProps {
   userReducer: UserState;
   onVerifyOTP: Function;
   onOTPRequest: Function;
-  navigation: any;
+  navigation: { navigate: Function}
 }
 
 const _LoginScreen: React.FC<LoginProps> = ({

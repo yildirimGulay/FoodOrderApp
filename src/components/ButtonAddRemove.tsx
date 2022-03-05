@@ -3,13 +3,15 @@ import { StyleSheet, View, Text, TouchableOpacity, TextInput, Image } from 'reac
 
 interface ButtonProps{ 
     onAdd: Function;
-    qty: number;
+    unit: number;
     onRemove: Function;
+    qty: number | undefined
  }
 
 
-const ButtonAddRemove: React.FC<ButtonProps> = ({ onAdd, qty, onRemove }) => {
+const ButtonAddRemove: React.FC<ButtonProps> = ({ onAdd, onRemove,qty }) => {
 
+    console.log('unit',qty)
 if(qty > 0){
     return (
         <View style={styles.optionsView}>
