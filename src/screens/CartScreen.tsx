@@ -59,78 +59,74 @@ const _CartScreen: React.FC<CartScreenProps> = ({
   const {cart, user, location, orders , appliedOffer} = userReducer;
 
 
-  useEffect(() => {
-    onCalculateAmount();
-  }, [cart]);
 
-  const onCalculateAmount = () => {
-    let total = 0;
-    if (Array.isArray(cart)) {
-      cart.map(food => {
-        total += food.price * food.unit;
-      });
+
+
+  const onTapFood = (item: FoodModel) => {
+    navigation.navigate('FoodDetailsPage', { food: item })
+}
+
+useEffect(() => {
+    onCalculateAmount()
+}, [cart,appliedOffer])
+
+
+const onCalculateAmount = () => {
+
+    let total = 0
+    if(Array.isArray(cart)){
+        cart.map(food => {
+            total += food.price * food.unit
+        })
     }
 
     const tax = (total / 100 * 0.9) + 40
 
-        if(total > 0) {
-            setTotalTax(tax)
+    if(total > 0) {
+        setTotalTax(tax)
+    }
+
+    setTotalAmount(total)
+    setPayableAmount((total + tax))
+    setDiscount(0)
+
+    if(appliedOffer._id !== undefined) {
+
+        if(total >= appliedOffer.minValue) {
+
+            const discount = (total / 100) * appliedOffer.offerPercentage
+            setDiscount(discount)
+            const afterDiscount = (total - discount)
+            setPayableAmount(afterDiscount)
+
+        } else {
+            showAlert("The applied Offer is not Applicable!",
+            `This offer is applicable with mininum ${appliedOffer.minValue} only! Please select another offer.`,
+            onApplyOffer(appliedOffer, true))
         }
+    }
 
-        setTotalAmount(total)
-        setPayableAmount(total)
-        setDiscount(0)
-        
-        if(appliedOffer._id !== undefined) {
-
-            if(total >= appliedOffer.minValue) {
-
-                const discount = (total / 100) * appliedOffer.offerPercentage
-                setDiscount(discount)
-                const afterDiscount = (total - discount)
-                setPayableAmount(afterDiscount)
-
-            } else {
-                showAlert("The applied Offer is not Applicable!",
-                `This offer is applicable with mininum ${appliedOffer.minValue} only! Please select another offer.`,
-               onApplyOffer(appliedOffer, true))
-            }
-        }
-
-        setTotalAmount(total)
-    };
-
-
-
-
-
-  const onValidateOrder = () => {
-    if(user !== undefined) {
-      if(!user.verified) {
-          navigation.navigate('Login')
-      } else {
-       
-        console.log('you can order')
-          popupRef.current?.open()
-        
-      }
-  } else {
-   
-      navigation.navigate("Login")
-    
-  }  
-  };
-
-  const onTapPlaceOrder = () => {
-    
-    onCreateOrder(cart, user)
-    popupRef.current?.close()
-    onApplyOffer(appliedOffer, true)
+    setTotalAmount(total)
 }
 
-  const onTapFood = (item: FoodModel) => {
-    navigation.navigate('FoodDetail', {food: item});
-  };
+const onValidateOrder = () => {
+
+    if(user !== undefined) {
+        if(!user.verified) {
+            navigation.navigate('Login')
+        } else {
+            popupRef.current?.open()
+        }
+    } else {
+        navigation.navigate('Login')
+    }        
+}
+
+const onTapPlaceOrder = () => {
+    onCreateOrder(cart, user)
+    popupRef.current?.close(),
+    onApplyOffer(appliedOffer, true)
+}
 
 
   const footerContent = () => {
@@ -266,7 +262,7 @@ const _CartScreen: React.FC<CartScreenProps> = ({
 
           <View style={styles.footer}>
               <View style={styles.amount_container} >
-                  <Text style={styles.total_text} > Total: {totalAmount}</Text>
+                  <Text style={styles.total_text} > Total: {payableAmount.toFixed(0)}</Text>
                   <Text style={styles.total_text} > ₺</Text>
               </View>
               <ButtonWithTitle title={"Make Payment"} onTap={onValidateOrder} height={50} width={320}/>

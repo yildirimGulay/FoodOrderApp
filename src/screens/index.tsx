@@ -9,3 +9,4 @@ export * from './RestaurantScreen';
 export * from './LoginScreen';
 export * from './OrderScreen';
 export * from './OrderDetailScreen';
+export * from './LocationScreen';

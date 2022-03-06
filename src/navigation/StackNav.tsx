@@ -11,10 +11,12 @@ import {
   OrderScreen,
   OrderDetailScreen,
   OfferScreen,
+  LocationScreen
  
 } from '../screens';
 
 import {TabNav} from './TabNav';
+
 
 
 export const StackNav = () => {
@@ -37,7 +39,7 @@ export const StackNav = () => {
       <Stack.Screen name="OrderDetail" component={OrderDetailScreen} />
       <Stack.Screen name="AccountOrder" component={OrderScreen} />
       <Stack.Screen name="CartOffer" component={OfferScreen} />
-      
+      <Stack.Screen name="Location" component={LocationScreen} />
     </Stack.Navigator>
   );
 };

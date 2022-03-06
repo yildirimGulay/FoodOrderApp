@@ -56,7 +56,7 @@ const _LandingScreen: React.FC<LandingProps> = ({
   }, []);
 
   useEffect(() => {
-    const key = '9c7704b06ab64272a3fc91d27796a202';
+    const key = 'a72e4d8f377a4821bb83199f4b41025a';
     if (position) {
       opencage
         .geocode({
@@ -78,7 +78,7 @@ const _LandingScreen: React.FC<LandingProps> = ({
             }, 2000);
           }
         })
-        .catch(error => console.error(error));
+        .catch(error => console.error('errr',error));
     }
   }, [position]);
     

@@ -38,7 +38,7 @@ const _OrderDetailScreen: React.FC<OrderDetailScreenProps> = ({navigation, route
         )
 
     }
-
+console.log('order',order)
 
     const headerCart = () => {
 
@@ -67,7 +67,7 @@ const _OrderDetailScreen: React.FC<OrderDetailScreenProps> = ({navigation, route
                     <Text style={{ fontSize: 18 }} >Map View will come here. </Text>
                 </View>
                 <View style={{marginBottom: 10}} >
-                    <ButtonWithTitle title={"Cancel Order"} onTap={onTapCancelOrder} height={50} width={320} />
+                    <ButtonWithTitle title={"Cancel Order"} onTap={()=>onTapCancelOrder()} height={50} width={320} />
                 </View>
             </>
             )
