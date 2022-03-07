@@ -7,6 +7,7 @@ import {
   Dimensions,
   Button,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 
 import Geolocation from '@react-native-community/geolocation';
@@ -14,6 +15,7 @@ import opencage from 'opencage-api-client';
 
 import {connect} from 'react-redux';
 import {onUpdateLocation, UserState, ApplicationState} from '../redux';
+import {showAlert} from '../utils';
 
 export const screenWidth = Dimensions.get('screen').width;
 
@@ -45,18 +47,23 @@ const _LandingScreen: React.FC<LandingProps> = ({
   const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
-    try {
-      // loading start
-      Geolocation.getCurrentPosition(position => setPosition(position));
-    } catch (error) {
-      console.error(error);
-    } finally {
-      // loading end
-    }
+    Geolocation.getCurrentPosition(
+      position => setPosition(position),
+      error => setErrorMsg('hata'),
+    );
   }, []);
 
+  if (errorMsg.length > 0) {
+    Alert.alert("Location Permission Needed!", "Location Permission needed to access your nearest restaurants!", 
+    [
+      {onPress: () => navigation.navigate('Location')},
+    ]);
+  }
+
+  console.log('remsg', errorMsg, 'position', position);
+
   useEffect(() => {
-    const key = 'a72e4d8f377a4821bb83199f4b41025a';
+    const key = '9c7704b06ab64272a3fc91d27796a202';
     if (position) {
       opencage
         .geocode({
@@ -78,10 +85,9 @@ const _LandingScreen: React.FC<LandingProps> = ({
             }, 2000);
           }
         })
-        .catch(error => console.error('errr',error));
+        .catch(error => console.error(error));
     }
   }, [position]);
-    
 
   return (
     <View style={styles.container}>
