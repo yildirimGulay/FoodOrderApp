@@ -20,6 +20,8 @@
     "opencage-api-client": "^1.0.0",
     "react": "17.0.2",
     "react-native": "0.66.4",
+    "react-native-google-places-autocomplete": "^2.4.1",
+    "react-native-maps": "^0.30.1",
     "react-native-raw-bottom-sheet": "^2.2.0",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.10.2",

@@ -5,8 +5,6 @@ import {
   View,
   Image,
   Dimensions,
-  Button,
-  TouchableOpacity,
   Alert,
 } from 'react-native';
 
@@ -15,7 +13,7 @@ import opencage from 'opencage-api-client';
 
 import {connect} from 'react-redux';
 import {onUpdateLocation, UserState, ApplicationState} from '../redux';
-import {showAlert} from '../utils';
+
 
 export const screenWidth = Dimensions.get('screen').width;
 
@@ -29,6 +27,7 @@ interface LocationAddress {
 }
 
 interface LandingProps {
+  navigation: {navigate: Function}, 
   userReducer: UserState;
   onUpdateLocation: Function;
 }
@@ -42,26 +41,26 @@ const _LandingScreen: React.FC<LandingProps> = ({
     'Waiting for Current Location',
   );
   const [position, setPosition] = useState<any>();
-  const [lat, setLat] = useState<number>();
-  const [long, setLong] = useState<number>();
-  const [errorMsg, setErrorMsg] = useState('');
+ 
+
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
       position => setPosition(position),
-      error => setErrorMsg('hata'),
+      error => {
+        Alert.alert("Location Permission Needed!", "Location Permission needed to access your nearest restaurants!", 
+        [
+          {onPress: () => navigation.navigate('Location')},
+        ]);
+      }
     );
-  }, []);
+   
+  }, [position]);
 
-  if (errorMsg.length > 0) {
-    Alert.alert("Location Permission Needed!", "Location Permission needed to access your nearest restaurants!", 
-    [
-      {onPress: () => navigation.navigate('Location')},
-    ]);
-  }
 
-  console.log('remsg', errorMsg, 'position', position);
+ 
 
+ 
   useEffect(() => {
     const key = '9c7704b06ab64272a3fc91d27796a202';
     if (position) {

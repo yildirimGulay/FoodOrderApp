@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
   StyleSheet,
@@ -10,6 +10,7 @@ import {
   SafeAreaView,
   FlatList,
   Alert,
+  Image,
 } from 'react-native';
 
 import {connect} from 'react-redux';
@@ -32,7 +33,7 @@ import {
 } from '../components';
 
 interface HomeProps {
-  navigation: any,
+  navigation: any;
   userReducer: UserState;
   shoppingReducer: ShoppingState;
   onAvailability: Function;
@@ -44,44 +45,48 @@ const _HomeScreen: React.FC<HomeProps> = ({
   userReducer,
   shoppingReducer,
   onAvailability,
-  onSearchFoods
+  onSearchFoods,
 }) => {
+  const [address, setAddress] = useState('Address');
   const {location, postCode} = userReducer;
   const {availability} = shoppingReducer;
   const {categories, foods, restaurants} = availability;
 
   useEffect(() => {
+    setAddress(location);
     onAvailability(postCode);
     setTimeout(() => {
-      onSearchFoods(postCode)
-    },1000)
-  }, []);
+      onSearchFoods(postCode);
+    }, 1000);
+  }, [location]);
 
   const onTapRestaurant = (item: Restaurant) => {
     navigation.navigate('Restaurant', {restaurant: item});
-   
   };
-
 
   const onTapFood = (item: FoodModel) => {
     navigation.navigate('FoodDetail', {food: item});
   };
 
-  
+  const onTapEditLocation = () => {
+    navigation.navigate("Location")
+}
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.navigation}>
         <View style={styles.navigation_inner_container}>
-          <Text>{location} </Text>
-          <Text
-            style={{
-              color: 'rgba(246,80,0,255)',
-              fontSize: 20,
-              paddingLeft: 10,
-            }}>
-            Edit
-          </Text>
+          <Image
+            style={{width: 30, height: 30}}
+            source={require('../images/delivery_icon.png')}
+          />
+          <Text style={styles.address_text}>{address}</Text>
+          <ButtonWithIcon
+            height={30}
+            width={30}
+            icon={require('../images/edit_icon.png')}
+            onTap={ onTapEditLocation}
+          />
         </View>
         <View style={styles.search_bar_container}>
           <SearchBar
@@ -147,7 +152,6 @@ const _HomeScreen: React.FC<HomeProps> = ({
   );
 };
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -185,6 +189,12 @@ const styles = StyleSheet.create({
     color: '#f15b5d',
     marginLeft: 20,
   },
+  address_text: {
+    fontSize: 13,
+    color: 'black',
+    marginRight: 10,
+    marginLeft: 10,
+  },
 });
 
 const mapToStateProps = (state: ApplicationState) => ({
@@ -192,6 +202,8 @@ const mapToStateProps = (state: ApplicationState) => ({
   shoppingReducer: state.shoppingReducer,
 });
 
-const HomeScreen = connect(mapToStateProps, {onAvailability, onSearchFoods})(_HomeScreen);
+const HomeScreen = connect(mapToStateProps, {onAvailability, onSearchFoods})(
+  _HomeScreen,
+);
 
 export {HomeScreen};

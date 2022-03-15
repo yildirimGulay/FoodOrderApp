@@ -66,6 +66,7 @@ export interface UserState {
     cart: [FoodModel], 
     orders: [OrderModel],
     appliedOffer: OfferModel,
+    pickedAddress: PickedAddress
 }
 
 export interface ShoppingState {
@@ -91,4 +92,27 @@ export interface OfferModel {
     bank: [any],
     bin: [any],
     pincode: string
+}
+
+export interface Region {
+    latitude: number
+    longitude:  number
+    latitudeDelta:  number
+    longitudeDelta:  number
+}
+
+export interface PickedAddress {
+    address_components: [
+        {
+            long_name: string,
+            short_name: string,
+            types: [string]
+        }
+    ],
+    formatted_address: string,
+    place_id: string
+}
+
+export interface PickedLocationResult {
+    results: [PickedAddress]
 }

@@ -5,6 +5,7 @@ import {
   FoodModel,
   OrderModel,
   OfferModel,
+  PickedAddress,
 } from '../models';
 
 const initialState: UserState = {
@@ -15,6 +16,7 @@ const initialState: UserState = {
   cart: {} as [FoodModel],
   orders: {} as [OrderModel],
   appliedOffer: {} as OfferModel,
+  pickedAddress: {} as PickedAddress
 };
 
 const UserReducer = (state: UserState = initialState, action: UserAction) => {
@@ -106,6 +108,13 @@ const UserReducer = (state: UserState = initialState, action: UserAction) => {
         ...state,
         appliedOffer: {},
       };
+
+      case "ON_FETCH_LOCATION":
+        return {
+            ...state,
+            pickedAddress: action.payload
+        }
+
 
     default:
       return state;
